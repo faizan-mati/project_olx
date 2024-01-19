@@ -3,7 +3,7 @@ import './Footer.css'
 import footerImg from '../../Images/AllCategries/footer.webp'
 const Footer = () => {
     return (
-        <div>
+        <div style={{backgroundColor:"#F8FAF9"}}>
             <div className='container'>
                 <div className='row'>
                     <div className='col-lg-4'>

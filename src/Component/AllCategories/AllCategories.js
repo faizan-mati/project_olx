@@ -44,7 +44,7 @@ const AllCategories = () => {
                 <br />
                 <div className='row'>
                     {categories.map((category, index) => (
-                        <div key={index} className='col-lg-2 col-md-2 col-sm-3 col-6'>
+                        <div key={index} className='col-lg-2 col-md-2 col-sm-3 col-4'>
                             <SingleCategorie name={category.name} image={category.image} />
                         </div>
                     ))}

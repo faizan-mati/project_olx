@@ -17,7 +17,7 @@ const Product = (props) => {
           src={props.image}
           className="card-img-top"
           alt="Card Image"
-          style={{ height: '550px', objectFit: 'cover' }}
+          style={{ height: '250px', objectFit: 'cover' }}
         />
         <div className="card-body">
           <h5 className="card-title">{truncateDescription(props.name, 30)}</h5>
