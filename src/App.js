@@ -1,17 +1,34 @@
-import Dashboard from './Screen/Dashboard/Dashboard';
 import './App.css';
-import ProductDetail from './Screen/ProductDetail/ProductDetail';
 import Rounter from './Config/Router';
 import NavBar from './Component/NavBar/NavBar';
 import Footer from './Component/Footer/Footer';
 import AfterNavBar from './Component/NavBar/AfterNavBar';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './Config/FireBase'
+import { useEffect, useState } from 'react';
+
 
 function App() {
+
+  const [screen, setScreen] = useState(false)
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setScreen(true)
+      } else {
+        setScreen(false)
+      }
+    });
+  }, []);
   return (
     <div>
-      <NavBar />
+      {
+        screen ?
+          <AfterNavBar />
+          :
+          <NavBar />
+      }
       <Rounter />
-      {/* <AfterNavBar /> */}
       <Footer />
     </div>
   );

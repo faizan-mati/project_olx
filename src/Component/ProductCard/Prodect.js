@@ -12,7 +12,7 @@ const Product = (props) => {
 
   return (
     <div className="container mt-4">
-      <div className="card hover-card">
+      <div className="card hover-card" style={{height:"470px"}}>
         <img
           src={props.image}
           className="card-img-top"
@@ -21,19 +21,12 @@ const Product = (props) => {
         />
         <div className="card-body">
           <h5 className="card-title">{truncateDescription(props.name, 30)}</h5>
-          <h5 className="card-text">Price: {props.price}Rs</h5>
           <p className="card-text">{truncateDescription(props.des, 150)}</p>
+          <h5 className="card-text">Price: {props.price} Rs</h5>
         </div>
-        <ul className="list-group list-group-flush d-flex justify-content-between align-items-center">
-          <li className="list-group-item">
-            <div className='row'>
-              <div className='col-lg-10'>
-                January 1, 2023
-              </div>
-              <div className='col-lg-2'>
-                <CiHeart style={{ fontSize: '2rem' }} className="heart-icon" />
-              </div>
-            </div>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">           
+                {props.postDate}
           </li>
         </ul>
       </div>

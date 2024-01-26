@@ -1,0 +1,35 @@
+.custom-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px;
+    background-color: #ffffff;
+  }
+
+  .custom-card-header {
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .custom-card-content {
+    padding: 16px;
+  }
+
+ .custom-card1 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px;
+    background-color: #ffffff;
+  }
+
+  .custom-card1-header {
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .custom-card1-content {
+    padding: 16px;
+  }

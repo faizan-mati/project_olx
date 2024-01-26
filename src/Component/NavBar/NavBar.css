@@ -19,10 +19,7 @@
   top: 30px;
 }
 
-/* YourComponent.css */
-
 .input-label {
-  /* Add styles for the label */
   display: block;
   margin-bottom: 5px;
   margin-left: 6px;
@@ -31,4 +28,258 @@
   font-size: 20px;
 }
 
+/* ===============login and Register form btn ===================== */
 
+
+.formLoginBtn {
+  margin-top: 30px;
+  font-weight: 900;
+  border-radius: 50px;
+  width: 95%;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  background-color: #1a1818;
+  -webkit-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+
+.formLoginBtn:hover {
+  background-color: #515050;
+}
+
+.formLoginBtn::before {
+  content: "LOGIN";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #515050;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  -o-transition: transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+  -webkit-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+.formLoginBtn:hover::before {
+  -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
+}
+
+
+.formRegisterBtn {
+  margin-top: 30px;
+  font-weight: 900;
+  border-radius: 50px;
+  width: 95%;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  background-color: #1a1818;
+  -webkit-transition: background-color 0.3s;
+  -o-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+
+.formRegisterBtn:hover {
+  background-color: #515050;
+}
+
+.formRegisterBtn::before {
+  content: "REGISTER";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #515050;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  -o-transition: transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+  -webkit-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+.formRegisterBtn:hover::before {
+  -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
+}
+
+
+/* ===============NavBar Drop Btn and Card===================== */
+.social-icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: 5px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.social-icon {
+  width: 35px;
+  height: 35px;
+}
+
+/* ===============NavBar Drop Btn and Card===================== */
+
+.custom-card-drop {
+  position: absolute;
+  left: 62%;
+  top: 18%;
+  width: 300px;
+  background-color: #FFFFFF;
+  z-index: 99;
+}
+
+.customize-drop-btn {
+  border: none;
+  background-color: #FFFFFF;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+}
+
+.customize-drop-btn:hover {
+  background-color: #e2e2e3;
+}
+
+/* ===============NavBar Logo ===================== */
+
+.Nav-First-logo {
+  width: 80px;
+}
+
+.Nav-Second-logo {
+  width: 100px;
+}
+
+/* ===============Media Qurey ===================== */
+
+@media screen and (min-width: 200px) and (max-width: 500px) {
+  .Nav-First-logo {
+    width: 60px;
+  }
+
+  .Nav-Second-logo {
+    width: 70px;
+  }
+
+  .custom-card-drop {
+    position: absolute;
+    left: 0%;
+    top: 18%;
+    width: 300px;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 768px) {
+  .Nav-First-logo {
+    width: 60px;
+  }
+
+  .Nav-Second-logo {
+    width: 70px;
+  }
+
+  .custom-card-drop {
+    position: absolute;
+    left: 20%;
+    top: 19%;
+    width: 300px;
+    
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 911px) {
+  .Nav-First-logo {
+    width: 60px;
+  }
+
+  .Nav-Second-logo {
+    width: 80px;
+  }
+
+  .custom-card-drop {
+    position: absolute;
+    left: 40%;
+    top: 19%;
+    width: 300px;
+  }
+}
+
+@media screen and (min-width: 991px) and (max-width: 1334px) {
+  .Nav-First-logo {
+    width: 60px;
+  }
+
+  .Nav-Second-logo {
+    width: 80px;
+  }
+
+  .custom-card-drop {
+    position: absolute;
+    left: 55%;
+    top: 20%;
+    width: 300px;
+  }
+}
+
+@media screen and (min-width: 1334px) and (max-width: 1834px) {
+  .Nav-First-logo {
+    width: 70px;
+  }
+
+  .Nav-Second-logo {
+    width: 100px;
+  }
+
+  .custom-card-drop {
+    position: absolute;
+    left: 60%;
+    top: 20%;
+    width: 300px;
+  }
+}
