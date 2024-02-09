@@ -6,6 +6,8 @@ import AfterNavBar from './Component/NavBar/AfterNavBar';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './Config/FireBase'
 import { useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
+import store from './Store';
 
 
 function App() {
@@ -22,14 +24,16 @@ function App() {
   }, []);
   return (
     <div>
-      {
-        screen ?
-          <AfterNavBar />
-          :
-          <NavBar />
-      }
-      <Rounter />
-      <Footer />
+      <Provider store={store}>
+        {
+          screen ?
+            <AfterNavBar />
+            :
+            <NavBar />
+        }
+        <Rounter />
+        <Footer />
+      </Provider>
     </div>
   );
 }

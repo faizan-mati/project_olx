@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { getCurrentUserUID, getuser, updateUserData } from '../../Config/FireBase';
+import { useSelector } from 'react-redux';
 
 const EditProfile = () => {
   const [editName, setEditName] = useState('');
   const [editPhone, setEditPhone] = useState('');
   const [editPic, setEditPic] = useState('');
   const [user, setUser] = useState([]);
+  const theme = useSelector((state) => state.theme);
 
+  // Provide default values if theme is undefined
+  const backgroundColor = theme?.backgroundColor || 'white';
+  const textColor = theme?.textColor || 'black';
   const uid = getCurrentUserUID();
 
   useEffect(() => {
@@ -24,7 +29,7 @@ const EditProfile = () => {
 
   if (user === undefined) {
     return (
-      <div className="loading-container">
+      <div className="loading-container"  style={{ backgroundColor, color: textColor }}>
         <div className="loader"></div>
         <p>Loading...</p>
       </div>
@@ -32,10 +37,10 @@ const EditProfile = () => {
   }
 
   return (
-    <div>
-      <div className='container my-5'>
-        <div className='custom-card p-4' style={{ backgroundColor: "#F8F9FA" }}>
-          <div className='row'>
+    <div style={{ backgroundColor, color: textColor }}>
+      <div className='container py-5' >
+        <div className='custom-card p-4' style={{ backgroundColor, color: textColor }}>
+          <div className='row' >
             {/* ... other code ... */}
             <div className='col-lg-6'>
               <div className="mb-3">

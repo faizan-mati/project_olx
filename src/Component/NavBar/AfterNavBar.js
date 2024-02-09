@@ -7,13 +7,25 @@ import gifVagetable from '../../Images/gifVagetable.gif';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './NavBar.css';
 import { getCurrentUserUID } from '../../Config/FireBase';
+import { setTheme } from '../../Store/ThemeSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import cart from '../../Images/cart.gif'
 
 const AfterNavBar = () => {
     const [isRotated, setIsRotated] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [user, setUser] = useState();
+    const [currentTheme, setCurrentTheme] = useState('light');
 
     const uid = getCurrentUserUID();
+    const dispatch = useDispatch()
+    const cartItems = useSelector((state) => state.cart.items);
+    const theme = useSelector((state) => state.theme);
+
+    // Provide default values if theme is undefined
+    const backgroundColor = theme?.backgroundColor || 'white';
+    const textColor = theme?.textColor || 'black';
 
     useEffect(() => {
         userInfo(uid);
@@ -28,19 +40,29 @@ const AfterNavBar = () => {
         setIsRotated((prev) => !prev);
         setShowProfile(!isRotated);
     };
+    const toggleTheme = () => {
+        if (currentTheme === 'light') {
+            dispatch(setTheme({ backgroundColor: '#153032', textColor: 'white' }));
+            setCurrentTheme('dark');
+        } else {
+            dispatch(setTheme({ backgroundColor: 'white', textColor: 'black' }));
+            setCurrentTheme('light');
+        }
+    };
+
 
     if (user === undefined) {
         return (
-          <div className="loading-container">
-            <div className="loader"></div>
-            <p>Loading...</p>
-          </div>
+            <div className="loading-container" style={{ backgroundColor, color: textColor }}>
+                <div className="loader"></div>
+                <p>Loading...</p>
+            </div>
         );
-      }
-  
+    }
+
     return (
         <div>
-            <div className='bg-light'>
+            <div style={{ backgroundColor, color: textColor }}>
                 <div className='container'>
                     <div className='row'>
                         <div className='col-lg-1 col-md-3 col-sm-3 col-2' style={{ marginTop: "px", marginLeft: "%" }}>
@@ -56,8 +78,8 @@ const AfterNavBar = () => {
                         </div>
                     </div>
                 </div>
-
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                {/* <hr /> */}
+                <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor, color: textColor }}>
                     <div className='container'>
                         <a href='/'>
                             <img src={logo} alt='Logo' className='Nav-Second-logo' />
@@ -93,6 +115,37 @@ const AfterNavBar = () => {
                                     />
                                 </span>
                             </a>
+                            {currentTheme === 'light' ? (
+                                <FaMoon
+                                    size={30}
+                                    color={currentTheme === 'light' ? 'black' : 'white'}
+                                    onClick={toggleTheme}
+                                    className='mx-2'
+                                />
+                            ) : (
+                                <FaSun
+                                    size={30}
+                                    color='white'
+                                    onClick={toggleTheme}
+                                    className='mx-2'
+                                />
+                            )}
+                            <a href='/cart'>
+                                {/* <div> */}
+                                {currentTheme === 'light' ? (
+                                    <>
+                                        <img src={cart} alt="cart" width={40} />
+                                        {cartItems.length > 0 && <span style={{ backgroundColor: "black", color: "white" }} className='rounded-circle px-2'>{cartItems.length}</span>}
+                                    </>
+                                ) : (
+                                    <>
+                                        <img src={cart} alt="cart" width={40} />
+                                        {cartItems.length > 0 && <span style={{ backgroundColor: "white", color: "black" }} className='rounded-circle px-2'>{cartItems.length}</span>}
+                                    </>
+                                )}
+                                {/* </div> */}
+                            </a>
+                            {/* <FaShoppingCart size={24} color="blue" className='mx-2' /> */}
                             <a href='/AddPost'>
                                 <button className='nav-custom-btn' style={{ marginLeft: "20px" }} variant="primary">
                                     POST ADD
@@ -102,7 +155,6 @@ const AfterNavBar = () => {
                     </div>
                 </nav>
             </div>
-
             {showProfile && (
                 <div className='p-3 text-left  custom-card  custom-card-drop '>
                     <div className='row'>
@@ -139,4 +191,4 @@ const AfterNavBar = () => {
     );
 }
 
-export default AfterNavBar
+export default AfterNavBar	

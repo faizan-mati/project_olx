@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './AddPost.css'
 import { PostAdd } from '../../Config/FireBase';
+import { useSelector } from 'react-redux';
+import MapComponent from './MapComponent';
 
 const AddPost = () => {
     const [itemName, setItemName] = useState('');
@@ -17,61 +19,74 @@ const AddPost = () => {
     const [yourEmail, setYourEmail] = useState(null);
     const [yourName, setYourName] = useState(null);
     const [yourNumber, setYourNumber] = useState(null);
+    const [mapLocation, setMapLocation] = useState(null);
+
+    const theme = useSelector((state) => state.theme);
+
+    // Provide default values if theme is undefined
+    const backgroundColor = theme?.backgroundColor || 'white';
+    const textColor = theme?.textColor || 'black';
 
     const Addsubmit = async () => {
+        if (!itemName || !brandName || !itemCondition || !itemPrice || !itemQuantity ||
+            !itemLocation || !deliveryTime || !shipping || !paymentMethod || !itemDes || !itemPic ||
+            !yourName || !yourEmail || !yourNumber) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
         await PostAdd({
             itemName, brandName, itemCondition, itemPrice, itemQuantity,
             itemLocation, deliveryTime, shipping, paymentMethod, itemDes,
             itemPic, yourName, yourEmail, yourNumber
         })
-    }
+
+        setItemName('');
+        setBrandName('');
+        setItemCondition('---');
+        setItemPrice('');
+        setItemQuantity('');
+        setItemLocation('---');
+        setDeliveryTime('---');
+        setShipping('---');
+        setPaymentMethod('---');
+        setItemDes('');
+        setItemPic(null);
+        setYourName('');
+        setYourEmail('');
+        setYourNumber('');
+          }
 
     return (
-        <div>
-            <div className='container my-5'>
-                <div className='custom-card p-4' style={{ backgroundColor: "#F8F9FA" }}>
-                    <div className='row'>
-                        <div className='col-lg-12 text-cente'>
+        <div style={{ backgroundColor, color: textColor }}>
+            <div className='container py-5'>
+                <div className='custom-card p-4' style={{ backgroundColor, color: textColor }}>
+                    <div className='row' >
+                        <div className='col-lg-12 text-cente' >
                             <h3>ADD POST ADD</h3>
                             <hr />
                         </div>
                         <div className='col-lg-6'>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Your Name</label>
-                                <input type="text" className='form-control' name='itemQuantity'
+                                <input type="text" className='form-control' name='itemQuantity' value={yourName}
                                     onChange={(e) => setYourName(e.target.value)} />
                             </div>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Item Name</label>
-                                <input type="text" className='form-control' name='itemName'
+                                <input type="text" className='form-control' name='itemName' value={itemName}
                                     onChange={(e) => setItemName(e.target.value)} />
                             </div>
-                            {/* <div classname="mb-3">
-                                <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Select For</label>
-                                <div class="input-group input-group-merge">
-                                    <select name="itemTpye" id="" class="form-control" onChange={(e) => setItemType(e.target.value)}>
-                                        <option value="">---</option>
-                                        <option value="Male">Male
-                                        </option>
-                                        <option value="Female">Female
-                                        </option>
-                                        <option value="Female">Both
-                                        </option>
-                                    </select>
-                                </div>
-                            </div> */}
-
                             <div className="mb-3 mt-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Brand Name</label>
-                                <input type="text" className='form-control' name='brandName'
+                                <input type="text" className='form-control' name='brandName' value={brandName}
                                     onChange={(e) => setBrandName(e.target.value)} />
                             </div>
-
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Condition</label>
                                 <div class="input-group input-group-merge">
                                     <select name="itemCondition" id="" class="form-control" onChange={(e) => setItemCondition(e.target.value)}>
-                                        <option value="">---</option>
+                                        <option value="">{itemCondition}</option>
                                         <option value="New">New
                                         </option>
                                         <option value="Use">Use
@@ -81,18 +96,17 @@ const AddPost = () => {
                             </div>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Your Number</label>
-                                <input type="text" className='form-control' name='Enter Your Number'
+                                <input type="number" className='form-control' name='Enter Your Number' value={yourNumber}
                                     onChange={(e) => setYourNumber(e.target.value)} />
                             </div>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Item Price</label>
-                                <input type="text" className='form-control' name='itemPrice'
+                                <input type="text" className='form-control' name='itemPrice' value={itemPrice}
                                     onChange={(e) => setItemPrice(e.target.value)} />
                             </div>
-
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Item Quantity</label>
-                                <input type="text" className='form-control' name='itemQuantity'
+                                <input type="text" className='form-control' name='itemQuantity' value={itemQuantity}
                                     onChange={(e) => setItemQuantity(e.target.value)} />
                             </div>
                         </div>
@@ -100,14 +114,14 @@ const AddPost = () => {
                         <div className='col-lg-6'>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Your Email</label>
-                                <input type="email" className='form-control' name='itemQuantity'
+                                <input type="email" className='form-control' name='itemQuantity' value={yourEmail}
                                     onChange={(e) => setYourEmail(e.target.value)} />
                             </div>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Item Location </label>
                                 <div class="input-group input-group-merge">
                                     <select name="itemLocation" id="" class="form-control" onChange={(e) => setItemLocation(e.target.value)}>
-                                        <option value="">---</option>
+                                        <option value="">{itemLocation}</option>
                                         <option value="Lahore">Lahore
                                         </option>
                                         <option value="Karachi">Karachi
@@ -130,12 +144,11 @@ const AddPost = () => {
                                     </select>
                                 </div>
                             </div>
-
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Delivery Time</label>
                                 <div class="input-group input-group-merge">
                                     <select name="deliveryTime" id="" class="form-control" onChange={(e) => setDeliveryTime(e.target.value)}>
-                                        <option value="">---</option>
+                                        <option value="">{deliveryTime}</option>
                                         <option value="1 day to 3 days">1 day to 3 days
                                         </option>
                                         <option value="3 days to 1 week">3 days to 1 week
@@ -149,7 +162,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Shipping Type</label>
                                 <div class="input-group input-group-merge">
                                     <select name="Shipping" id="" class="form-control" onChange={(e) => setShipping(e.target.value)}>
-                                        <option value="">---</option>
+                                        <option value="">{shipping}</option>
                                         <option value="Paid">Paid
                                         </option>
                                         <option value="Free">Free
@@ -157,12 +170,11 @@ const AddPost = () => {
                                     </select>
                                 </div>
                             </div>
-
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Payment Method</label>
                                 <div class="input-group input-group-merge">
                                     <select name="peyment" id="" class="form-control" onChange={(e) => setPaymentMethod(e.target.value)}>
-                                        <option value="">---</option>
+                                        <option value="">{paymentMethod}</option>
                                         <option value="Cash On Delivery">Cash On Delivery
                                         </option>
                                         <option value="Online">Online
@@ -170,7 +182,6 @@ const AddPost = () => {
                                     </select>
                                 </div>
                             </div>
-
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Item Picture</label>
                                 <input type="file" className='form-control' name='itemPic'
@@ -188,12 +199,18 @@ const AddPost = () => {
                                 className='form-control'
                                 id="description"
                                 name="description"
-                                // value=""
+                                value={itemDes}
                                 onChange={(e) => setItemDes(e.target.value)}
                                 rows="4" // You can adjust the number of rows as needed
-
                             />
+
                         </div>
+                        {/* <div className='col-lg-12'>
+                            <MapComponent
+                                defaultLocation={{ lat: 0, lng: 0 }}
+                                onLocationChange={(location) => setMapLocation(location)} // Update mapLocation state
+                            />
+                        </div> */}
                         <div class="mt-5">
                             <button className='nav-custom-btn' onClick={() => Addsubmit()}>
                                 POST ADD

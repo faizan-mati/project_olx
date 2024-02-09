@@ -1,9 +1,15 @@
 import React from 'react'
 import './Footer.css'
 import footerImg from '../../Images/AllCategries/footer.webp'
+import { useSelector } from 'react-redux';
 const Footer = () => {
+    const theme = useSelector((state) => state.theme);
+
+    // Provide default values if theme is undefined
+    const backgroundColor = theme?.backgroundColor || 'white';
+    const textColor = theme?.textColor || 'black';
     return (
-        <div style={{backgroundColor:"#F8FAF9"}}>
+        <div style={{backgroundColor:"#F8FAF9", backgroundColor, color: textColor }}>
             <div className='container'>
                 <div className='row'>
                     <div className='col-lg-4'>

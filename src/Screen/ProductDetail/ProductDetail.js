@@ -4,6 +4,7 @@ import { FaMessage } from "react-icons/fa6";
 import LocationGif from '../../Images/LocationGif.gif'
 import { useParams } from 'react-router-dom';
 import { getDataid } from '../../Config/FireBase';
+import { useSelector } from 'react-redux';
 
 
 const ProductDetail = () => {
@@ -12,7 +13,11 @@ const ProductDetail = () => {
     const [apiData, setApiData] = useState([])
 
     const { addId } = useParams();
+    const theme = useSelector((state) => state.theme);
 
+    // Provide default values if theme is undefined
+    const backgroundColor = theme?.backgroundColor || 'white';
+    const textColor = theme?.textColor || 'black';
     // console.log("useparam", addId);
     useEffect(() => {
         productData()
@@ -31,7 +36,7 @@ const ProductDetail = () => {
 
     if (apiData.length <= 0) {
         return (
-            <div className="loading-container">
+            <div className="loading-container"  style={{ backgroundColor, color: textColor }}>
                 <div className="loader"></div>
                 <p>Loading...</p>
             </div>
@@ -40,15 +45,15 @@ const ProductDetail = () => {
 
 
     return (
-        <div>
-            <div className='container mt-4'>
-                <div className='row'>
+        <div style={{ backgroundColor, color: textColor }}>
+            <div className='container pt-4'>
+                <div className='row' style={{ backgroundColor, color: textColor }}>
                     <div className='col-lg-7'>
                         <img src={apiData.itemPic}
                             className='img-fluid' width="100%" height="" alt='' />
                     </div>
                     <div className='col-lg-5 mt-5'>
-                        <div className='card p-4'>
+                        <div className='card p-4' style={{ backgroundColor, color: textColor }}>
                             <div className='row'>
                                 <div className='col-lg-4 col-md-4 col-sm-4 col-4'>
                                     <img src='https://www.olx.com.pk/assets/iconProfilePicture.7975761176487dc62e25536d9a36a61d.png'
@@ -73,12 +78,12 @@ const ProductDetail = () => {
                             </button>
                         </div>
 
-                        <div className='card p-4 mt-3'>
-                            <div className='row'>
+                        <div className='card p-4 mt-3' style={{ backgroundColor, color: textColor }}>
+                            <div className='row' >
                                 <div className='col-lg-12'>
 
                                 </div>
-                                <div className='col-lg-8 mt-12'>
+                                <div className='col-lg-8 mt-12' >
                                     <h3><img src={LocationGif} alt='img' width="40px" /> Location</h3>
                                     <h4 style={{ fontWeight: "400" }}>{apiData.itemLocation}</h4>
                                 </div>
@@ -90,8 +95,8 @@ const ProductDetail = () => {
 
                 <div className='row mt-3'>
 
-                    <div className='col-lg-12'>
-                        <div className='card p-4'>
+                    <div className='col-lg-12' >
+                        <div className='card p-4' style={{ backgroundColor, color: textColor }}>
                             <div className='row'>
                                 <div className='col-lg-12'>
                                     <h3>Details</h3>
@@ -115,7 +120,7 @@ const ProductDetail = () => {
                     </div>
 
                     <div className='col-lg-12 my-3'>
-                        <div className='card p-4'>
+                        <div className='card p-4' style={{ backgroundColor, color: textColor }}>
                             <div className='row'>
                                 <div className='col-lg-12'>
                                     <h3>Description</h3>

@@ -11,8 +11,19 @@ import faceBook from '../../Images/FormLinkImage/faceBookIcon.png'
 import apple3 from '../../Images/FormLinkImage/apple3.png'
 import twitter from '../../Images/FormLinkImage/Twitter.png'
 import google from '../../Images/FormLinkImage/googleIcon.png'
+import { useDispatch, useSelector } from 'react-redux';
+import { setTheme } from '../../Store/ThemeSlice';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
 const NavBar = () => {
+  const [currentTheme, setCurrentTheme] = useState('light');
+
+  const dispatch = useDispatch()
+  const theme = useSelector((state) => state.theme);
+
+  // Provide default values if theme is undefined
+  const backgroundColor = theme?.backgroundColor || 'white';
+  const textColor = theme?.textColor || 'black';
 
   // ============== Register form ==========================
 
@@ -23,7 +34,18 @@ const NavBar = () => {
   const [pic, setPic] = useState();
 
   const signinbtn = () => {
+    if (!name || !phone || !email || !password || !pic) {
+      alert('Please fill in all required fields.');
+    }
+
     SignWithEmailPass({ name, phone, email, pic, password })
+
+    setName('');
+    setPhone('');
+    setEmail('');
+    setPassword('');
+    setPic(null);
+
   }
 
 
@@ -32,7 +54,16 @@ const NavBar = () => {
   const [logPassword, setLogPassword] = useState();
 
   const loginbtn = () => {
+    if (!logEmail || !logPassword) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
     loginWithEmailAndPass(logEmail, logPassword);
+
+    setLogEmail('');
+    setLogPassword('');
+
   }
 
 
@@ -46,8 +77,19 @@ const NavBar = () => {
 
   const handleSignUpClose = () => setShowSignUp(false);
   const handleShowSignUp = () => setShowSignUp(true);
+
+  const toggleTheme = () => {
+    if (currentTheme === 'light') {
+      dispatch(setTheme({ backgroundColor: '#153032', textColor: 'white' }));
+      setCurrentTheme('dark');
+    } else {
+      dispatch(setTheme({ backgroundColor: 'white', textColor: 'black' }));
+      setCurrentTheme('light');
+    }
+  };
+
   return (
-    <div className='bg-light'>
+    <div style={{ backgroundColor, color: textColor }}>
 
       <div className='container '>
         <div className='row'>
@@ -65,8 +107,7 @@ const NavBar = () => {
         </div>
       </div>
 
-
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor, color: textColor }}>
         <div className='container'>
           <a href='/'>
             <img src={logo} alt='Logo' className='Nav-Second-logo' />
@@ -93,9 +134,24 @@ const NavBar = () => {
 
             </div>
           </div>
+          {currentTheme === 'light' ? (
+            <FaMoon
+              size={30}
+              color={currentTheme === 'light' ? 'black' : 'white'}
+              onClick={toggleTheme}
+              className='mx-2'
+            />
+          ) : (
+            <FaSun
+              size={30}
+              color='white'
+              onClick={toggleTheme}
+              className='mx-2'
+            />
+          )}
           <div className=''>
             <button className='nav-custom-btn' variant="primary" onClick={handleShowSignIn}
-              style={{ marginRight: "10px" }}>REGISTER</button>
+              style={{ marginRight: "10px", marginLeft: "10px" }}>REGISTER</button>
             <button className='nav-custom-btn' variant="primary" onClick={handleShowSignUp}>LOGIN</button>
           </div>
         </div>
@@ -119,7 +175,7 @@ const NavBar = () => {
             <label className='input-label'>Name</label>
             <input
               className='form-control input-form'
-              type='text'
+              type='text' value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder='Enter Your Name'
             />
@@ -127,7 +183,7 @@ const NavBar = () => {
             <label className='input-label'>Phone Number</label>
             <input
               className='form-control input-form'
-              type='number'
+              type='number' value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder='Enter Your Phone Number'
             />
@@ -136,7 +192,7 @@ const NavBar = () => {
             <input
               className='form-control input-form'
               onChange={(e) => setEmail(e.target.value)}
-              type='email'
+              type='email' value={email}
               placeholder='Enter Your Email'
             />
             <br />
@@ -144,7 +200,7 @@ const NavBar = () => {
             <input
               className='form-control input-form'
               onChange={(e) => setPassword(e.target.value)}
-              type='password'
+              type='password' value={password}
               placeholder='Enter Your Password'
             />
             <br />
@@ -201,12 +257,12 @@ const NavBar = () => {
 
 
       {/*======================== LOG IN ======================= */}
-      <Modal show={showSignUp} onHide={handleSignUpClose} >
+      <Modal show={showSignUp} onHide={handleSignUpClose}  >
         <Modal.Header closeButton>
           <Modal.Title>LOGIN FORM</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className='text-center px-5'>
+          <div className='text-center px-5' >
             <p>Welcome back! Log in to your account
               and explore our website's offerings.</p>
           </div>
@@ -216,7 +272,7 @@ const NavBar = () => {
             <input
               className='form-control input-form'
               onChange={(e) => setLogEmail(e.target.value)}
-              type='text'
+              type='text' value={logEmail}
               placeholder='Enter Your Email'
             />
             <br />
@@ -224,7 +280,7 @@ const NavBar = () => {
             <input
               className='form-control input-form'
               onChange={(e) => setLogPassword(e.target.value)}
-              type='password'
+              type='password' value={logPassword}
               placeholder='Enter Your Password'
             />
             <br />
