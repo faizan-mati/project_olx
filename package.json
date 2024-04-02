@@ -13,6 +13,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.2",
     "react-dom": "^18.2.0",
+    "react-fb-image-grid": "^0.1.5",
     "react-icon": "^1.0.0",
     "react-icons": "^4.12.0",
     "react-redux": "^9.1.0",

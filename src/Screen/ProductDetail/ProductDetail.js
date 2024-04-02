@@ -5,12 +5,14 @@ import LocationGif from '../../Images/LocationGif.gif'
 import { useParams } from 'react-router-dom';
 import { getDataid } from '../../Config/FireBase';
 import { useSelector } from 'react-redux';
-
+import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleRight } from "react-icons/fa";
 
 const ProductDetail = () => {
     const [click, setClick] = useState(false);
     const [showEmail, setShowEmail] = useState(false);
     const [apiData, setApiData] = useState([])
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const { addId } = useParams();
     const theme = useSelector((state) => state.theme);
@@ -22,6 +24,15 @@ const ProductDetail = () => {
     useEffect(() => {
         productData()
     }, []);
+
+    const handlePreviousImage = () => {
+        setCurrentImageIndex(prevIndex => (prevIndex === 0 ? apiData.itemPics.length - 1 : prevIndex - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex(prevIndex => (prevIndex === apiData.itemPics.length - 1 ? 0 : prevIndex + 1));
+    };
+
 
     const productData = async () => {
         try {
@@ -36,7 +47,7 @@ const ProductDetail = () => {
 
     if (apiData.length <= 0) {
         return (
-            <div className="loading-container"  style={{ backgroundColor, color: textColor }}>
+            <div className="loading-container" style={{ backgroundColor, color: textColor }}>
                 <div className="loader"></div>
                 <p>Loading...</p>
             </div>
@@ -48,10 +59,31 @@ const ProductDetail = () => {
         <div style={{ backgroundColor, color: textColor }}>
             <div className='container pt-4'>
                 <div className='row' style={{ backgroundColor, color: textColor }}>
+
                     <div className='col-lg-7'>
-                        <img src={apiData.itemPic}
-                            className='img-fluid' width="100%" height="" alt='' />
+                        <div className='row'>
+                            <div className='col-lg-1 col-md-1 col-sm-1 col-1 d-flex justify-content-center align-items-center'>
+                                <FaAngleLeft size={30} onClick={handlePreviousImage} />
+                            </div>
+
+                            <div className='col-lg-10 col-md-10 col-sm-10 col-9'>
+                                {apiData.itemPics && apiData.itemPics.length > 0 && (
+                                    <div>
+                                        <img
+                                            src={apiData.itemPics[currentImageIndex]}
+                                            className='img-fluid'
+                                            width="100%"
+                                            alt={`Image ${currentImageIndex + 1}`}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <div className='col-lg-1 col-md-1 col-sm-1 col-1 d-flex justify-content-center align-items-center'>
+                                <FaAngleRight size={30} onClick={handleNextImage} />
+                            </div>
+                        </div>
                     </div>
+
                     <div className='col-lg-5 mt-5'>
                         <div className='card p-4' style={{ backgroundColor, color: textColor }}>
                             <div className='row'>

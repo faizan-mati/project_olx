@@ -1,61 +1,74 @@
 import React, { useState } from 'react';
-import './AddPost.css'
+// import { useHistory } from 'react-router-dom'; // Import useHistory hook
+import './AddPost.css';
 import { PostAdd } from '../../Config/FireBase';
 import { useSelector } from 'react-redux';
-import MapComponent from './MapComponent';
+import { useNavigate } from 'react-router-dom';
 
 const AddPost = () => {
     const [itemName, setItemName] = useState('');
     const [brandName, setBrandName] = useState('');
-    const [itemCondition, setItemCondition] = useState('');
+    const [itemCondition, setItemCondition] = useState('---');
     const [itemPrice, setItemPrice] = useState('');
     const [itemQuantity, setItemQuantity] = useState('');
-    const [itemLocation, setItemLocation] = useState('');
-    const [deliveryTime, setDeliveryTime] = useState('');
-    const [shipping, setShipping] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState('');
+    const [itemLocation, setItemLocation] = useState('---');
+    const [deliveryTime, setDeliveryTime] = useState('---');
+    const [shipping, setShipping] = useState('---');
+    const [paymentMethod, setPaymentMethod] = useState('---');
     const [itemDes, setItemDes] = useState('');
-    const [itemPic, setItemPic] = useState(null);
+    const [itemPics, setItemPics] = useState([]);
     const [yourEmail, setYourEmail] = useState(null);
     const [yourName, setYourName] = useState(null);
     const [yourNumber, setYourNumber] = useState(null);
-    const [mapLocation, setMapLocation] = useState(null);
+    const [loading, setLoading] = useState(false); // Define loading state
+    
+const navigate = useNavigate()
 
     const theme = useSelector((state) => state.theme);
 
-    // Provide default values if theme is undefined
     const backgroundColor = theme?.backgroundColor || 'white';
     const textColor = theme?.textColor || 'black';
 
     const Addsubmit = async () => {
         if (!itemName || !brandName || !itemCondition || !itemPrice || !itemQuantity ||
-            !itemLocation || !deliveryTime || !shipping || !paymentMethod || !itemDes || !itemPic ||
+            !itemLocation || !deliveryTime || !shipping || !paymentMethod || !itemDes || !itemPics ||
             !yourName || !yourEmail || !yourNumber) {
             alert('Please fill in all required fields.');
             return;
         }
 
-        await PostAdd({
-            itemName, brandName, itemCondition, itemPrice, itemQuantity,
-            itemLocation, deliveryTime, shipping, paymentMethod, itemDes,
-            itemPic, yourName, yourEmail, yourNumber
-        })
+        setLoading(true);
 
-        setItemName('');
-        setBrandName('');
-        setItemCondition('---');
-        setItemPrice('');
-        setItemQuantity('');
-        setItemLocation('---');
-        setDeliveryTime('---');
-        setShipping('---');
-        setPaymentMethod('---');
-        setItemDes('');
-        setItemPic(null);
-        setYourName('');
-        setYourEmail('');
-        setYourNumber('');
-          }
+        try {
+            await PostAdd({
+                itemName, brandName, itemCondition, itemPrice, itemQuantity,
+                itemLocation, deliveryTime, shipping, paymentMethod, itemDes,
+                itemPics, yourName, yourEmail, yourNumber
+            });
+
+            setItemName('');
+            setBrandName('');
+            setItemCondition('---');
+            setItemPrice('');
+            setItemQuantity('');
+            setItemLocation('---');
+            setDeliveryTime('---');
+            setShipping('---');
+            setPaymentMethod('---');
+            setItemDes('');
+            setItemPics(null);
+            setYourName('');
+            setYourEmail('');
+            setYourNumber('');
+
+            navigate("/")
+        } catch (error) {
+            console.error('Error adding post:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     return (
         <div style={{ backgroundColor, color: textColor }}>
@@ -86,7 +99,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Condition</label>
                                 <div class="input-group input-group-merge">
                                     <select name="itemCondition" id="" class="form-control" onChange={(e) => setItemCondition(e.target.value)}>
-                                        <option value="">{itemCondition}</option>
+                                        <option value={itemCondition}>{itemCondition}</option>
                                         <option value="New">New
                                         </option>
                                         <option value="Use">Use
@@ -121,7 +134,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Item Location </label>
                                 <div class="input-group input-group-merge">
                                     <select name="itemLocation" id="" class="form-control" onChange={(e) => setItemLocation(e.target.value)}>
-                                        <option value="">{itemLocation}</option>
+                                        <option value={itemLocation}>{itemLocation}</option>
                                         <option value="Lahore">Lahore
                                         </option>
                                         <option value="Karachi">Karachi
@@ -148,7 +161,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Delivery Time</label>
                                 <div class="input-group input-group-merge">
                                     <select name="deliveryTime" id="" class="form-control" onChange={(e) => setDeliveryTime(e.target.value)}>
-                                        <option value="">{deliveryTime}</option>
+                                        <option value={deliveryTime}>{deliveryTime}</option>
                                         <option value="1 day to 3 days">1 day to 3 days
                                         </option>
                                         <option value="3 days to 1 week">3 days to 1 week
@@ -162,7 +175,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Shipping Type</label>
                                 <div class="input-group input-group-merge">
                                     <select name="Shipping" id="" class="form-control" onChange={(e) => setShipping(e.target.value)}>
-                                        <option value="">{shipping}</option>
+                                        <option value={shipping}>{shipping}</option>
                                         <option value="Paid">Paid
                                         </option>
                                         <option value="Free">Free
@@ -174,7 +187,7 @@ const AddPost = () => {
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Payment Method</label>
                                 <div class="input-group input-group-merge">
                                     <select name="peyment" id="" class="form-control" onChange={(e) => setPaymentMethod(e.target.value)}>
-                                        <option value="">{paymentMethod}</option>
+                                        <option value={paymentMethod}>{paymentMethod}</option>
                                         <option value="Cash On Delivery">Cash On Delivery
                                         </option>
                                         <option value="Online">Online
@@ -184,8 +197,8 @@ const AddPost = () => {
                             </div>
                             <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Item Picture</label>
-                                <input type="file" className='form-control' name='itemPic'
-                                    onChange={(e) => setItemPic(e.target.files[0])} />
+                                <input type="file" className='form-control' name='itemPic' multiple
+                                    onChange={(e) => setItemPics(e.target.files)} />
                             </div>
 
                         </div>

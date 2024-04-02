@@ -63,7 +63,8 @@ const Dashboard = () => {
               <div onClick={() => navigate(`/detail/${apiData[index].id}`)} key={index}
                 className=''>
                 <Prodect name={apiData[index].itemName} price={apiData[index].itemPrice}
-                  des={apiData[index].itemDes} image={apiData[index].itemPic} postDate={apiData[index].postDate} />
+                  des={apiData[index].itemDes} image={item.itemPics && item.itemPics.length > 0 ? item.itemPics[0] : ''}
+                   postDate={apiData[index].postDate} />
               </div>
               <button className='nav-custom-btn mx-3 my-2' style={{ backgroundColor: theme }} onClick={() => {
                 navigate("/purchase")

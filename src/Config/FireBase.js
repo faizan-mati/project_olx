@@ -74,21 +74,30 @@ const PostAdd = async (Adds) => {
     const {
       itemName, brandName, itemCondition, itemPrice, itemQuantity,
       itemLocation, deliveryTime, shipping, paymentMethod,
-      itemDes, itemPic, yourEmail, yourName, yourNumber
+      itemDes, itemPics, yourEmail, yourName, yourNumber
     } = Adds;
 
-    if (!itemPic || !itemPic.name) {
-      console.error('Invalid itemPic object:', itemPic);
-      throw new Error('Invalid itemPic object');
-    }
+    // Upload images to Firebase Storage
+    const uploadFiles = async () => {
+      const uploadedImageUrls = [];
 
-    const storageRef = ref(storage, `ads/${itemPic.name}`);
-    await uploadBytes(storageRef, itemPic);
-    const url = await getDownloadURL(storageRef);
+      for (let i = 0; i < itemPics.length; i++) {
+        const storageRef = ref(storage, `ads/${itemPics[i].name}`);
+        const result = await uploadBytes(storageRef, itemPics[i]);
+        const url = await getDownloadURL(storageRef);
+        uploadedImageUrls.push(url); // Push the uploaded image URL to the array
+      }
+
+      return uploadedImageUrls;
+    };
+
+    // Call the function to upload files
+    const uploadedImageUrls = await uploadFiles();
 
     // Get the current date
     const currentDate = new Date();
 
+    // Add document to Firestore with multiple image URLs
     await addDoc(collection(db, "ads"), {
       itemName,
       brandName,
@@ -103,7 +112,7 @@ const PostAdd = async (Adds) => {
       yourName,
       yourEmail,
       yourNumber,
-      itemPic: url,
+      itemPics: uploadedImageUrls, // Pass array of image URLs
       postDate: currentDate.toISOString().split('T')[0],
       uid
     });
