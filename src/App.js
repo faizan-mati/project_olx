@@ -1,37 +1,33 @@
 import './App.css';
-import Rounter from './Config/Router';
+import Router from './Config/Router';
 import NavBar from './Component/NavBar/NavBar';
 import Footer from './Component/Footer/Footer';
 import AfterNavBar from './Component/NavBar/AfterNavBar';
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from './Config/FireBase'
 import { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import store from './Store';
 
-
 function App() {
-
-  const [screen, setScreen] = useState(false)
+  const [screen, setScreen] = useState(false);
+  
+  // Retrieve token from Redux store state
+  const token = useSelector(state => state.token.token);
+  // console.log("user save info login",userInfo);
+  // console.log("user token",token);
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setScreen(true)
-      } else {
-        setScreen(false)
-      }
-    });
-  }, []);
+    // Check if token exists
+    if (token) {
+      setScreen(true); // Set screen to true if token exists
+    } else {
+      setScreen(false); // Set screen to false if token doesn't exist
+    }
+  }, [token]); // Re-run effect whenever token changes
+
   return (
     <div>
       <Provider store={store}>
-        {
-          screen ?
-            <AfterNavBar />
-            :
-            <NavBar />
-        }
-        <Rounter />
+        {screen ? <AfterNavBar /> : <NavBar />}
+        <Router />
         <Footer />
       </Provider>
     </div>

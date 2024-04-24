@@ -5,10 +5,14 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import themeReducer from './ThemeSlice';
 import cartReducer from './cartSlice';
+import tokenReducer from './tokenSlice';
+import userReducer from './userSlice';
 
 const rootReducer = combineReducers({
   theme: themeReducer,
   cart: cartReducer,
+  token: tokenReducer,
+  user: userReducer,
 });
 
 const persistConfig = {

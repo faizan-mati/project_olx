@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useHistory } from 'react-router-dom'; // Import useHistory hook
 import './AddPost.css';
-import { PostAdd } from '../../Config/FireBase';
+import { PostAdd, storage } from '../../Config/FireBase';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const AddPost = () => {
+    // const [id, setId] = useState();
     const [itemName, setItemName] = useState('');
     const [brandName, setBrandName] = useState('');
     const [itemCondition, setItemCondition] = useState('---');
@@ -21,53 +23,80 @@ const AddPost = () => {
     const [yourName, setYourName] = useState(null);
     const [yourNumber, setYourNumber] = useState(null);
     const [loading, setLoading] = useState(false); // Define loading state
-    
-const navigate = useNavigate()
+    const [user, setUser] = useState(false); // Define loading state
+
+    const navigate = useNavigate()
 
     const theme = useSelector((state) => state.theme);
 
     const backgroundColor = theme?.backgroundColor || 'white';
     const textColor = theme?.textColor || 'black';
+    const logUser = useSelector((state) => state.user.userInfo);
+    // console.log("logUser", logUser);
+    useEffect(() => {
+        users(logUser)
+    }, [])
+    const users = (logUser) => {
+        setUser(logUser.users)
+        // console.log("logUser.id", user.pic);
+    }
 
     const Addsubmit = async () => {
-        if (!itemName || !brandName || !itemCondition || !itemPrice || !itemQuantity ||
-            !itemLocation || !deliveryTime || !shipping || !paymentMethod || !itemDes || !itemPics ||
-            !yourName || !yourEmail || !yourNumber) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-
         setLoading(true);
-
+        console.log("userId", user._id);
+        let id = user._id;
         try {
-            await PostAdd({
-                itemName, brandName, itemCondition, itemPrice, itemQuantity,
-                itemLocation, deliveryTime, shipping, paymentMethod, itemDes,
-                itemPics, yourName, yourEmail, yourNumber
+            const imageUrls = [];
+            // Loop through all selected files
+            for (let i = 0; i < itemPics.length; i++) {
+                const itemPic = itemPics[i];
+                // Upload each image to Firestore Storage
+                const storageRef = ref(storage, `users/${itemPic.name}`);
+                await uploadBytes(storageRef, itemPic);
+                const imageUrl = await getDownloadURL(storageRef);
+                imageUrls.push(imageUrl);
+            }
+
+            // Send POST request to server
+            const response = await fetch('http://localhost:3001/product/add', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    // Include product data in the request body
+                    userId: id,
+                    brandName: brandName,
+                    deliveryTime: deliveryTime,
+                    itemCondition: itemCondition,
+                    itemDes: itemDes,
+                    itemLocation: itemLocation,
+                    itemName: itemName,
+                    itemPics: imageUrls, // Array of image URLs
+                    itemPrice: itemPrice,
+                    // itemQuantity: itemQuantity,
+                    paymentMethod: paymentMethod,
+                    shipping: shipping,
+                    yourEmail: yourEmail,
+                    yourName: yourName,
+                    yourNumber: yourNumber,
+                })
             });
 
-            setItemName('');
-            setBrandName('');
-            setItemCondition('---');
-            setItemPrice('');
-            setItemQuantity('');
-            setItemLocation('---');
-            setDeliveryTime('---');
-            setShipping('---');
-            setPaymentMethod('---');
-            setItemDes('');
-            setItemPics(null);
-            setYourName('');
-            setYourEmail('');
-            setYourNumber('');
+            // Check if the request was successful
+            if (!response.ok) {
+                throw new Error('Failed to add product');
+            }
 
-            navigate("/")
+            // Extract JSON response
+            const responseData = await response.json();
+            console.log(responseData);
         } catch (error) {
-            console.error('Error adding post:', error);
+            console.error('Error:', error);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
 
     return (
@@ -80,7 +109,10 @@ const navigate = useNavigate()
                             <hr />
                         </div>
                         <div className='col-lg-6'>
+
                             <div className="mb-3">
+                                {/* <input type="text" className='form-control' name='itemQuantity' value={user._id}
+                                    onChange={(e) => setId(e.target.value)}  style={{ display: 'none' }}/> */}
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Your Name</label>
                                 <input type="text" className='form-control' name='itemQuantity' value={yourName}
                                     onChange={(e) => setYourName(e.target.value)} />
@@ -117,11 +149,11 @@ const navigate = useNavigate()
                                 <input type="text" className='form-control' name='itemPrice' value={itemPrice}
                                     onChange={(e) => setItemPrice(e.target.value)} />
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label className='pb-2' style={{ fontSize: "18px", marginLeft: "10px" }}>Enter Item Quantity</label>
                                 <input type="text" className='form-control' name='itemQuantity' value={itemQuantity}
                                     onChange={(e) => setItemQuantity(e.target.value)} />
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className='col-lg-6'>

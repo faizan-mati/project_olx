@@ -11,11 +11,14 @@ import { setTheme } from '../../Store/ThemeSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import cart from '../../Images/cart.gif'
+import { setToken } from '../../Store/tokenSlice';
+import { clearUser } from '../../Store/userSlice';
 
 const AfterNavBar = () => {
     const [isRotated, setIsRotated] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [user, setUser] = useState();
+    const [userInformation, setUserInformation] = useState();
     const [currentTheme, setCurrentTheme] = useState('light');
 
     const uid = getCurrentUserUID();
@@ -27,15 +30,34 @@ const AfterNavBar = () => {
     const backgroundColor = theme?.backgroundColor || 'white';
     const textColor = theme?.textColor || 'black';
 
-    useEffect(() => {
-        userInfo(uid);
-    }, [uid]);
+    const token = useSelector(state => state.token.token);
+    // console.log("token", token);
 
-    const userInfo = async (uid) => {
-        const users = await getuser(uid);
-        setUser(users.data);
+
+    const logUser = useSelector((state) => state.user.userInfo);
+
+    useEffect(() => {
+        if (token) {
+            userInfo(logUser); // Fetch user data only if there is a token
+        }
+    }, [token]); // Trigger the effect whenever the token changes
+
+    const userInfo = async (logUser) => {
+        try {
+            // setUserInformation(logUser);
+
+            setUser(logUser.users)
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
     };
-    console.log("user navbar", user);
+    // console.log("user navbar", user);
+
+    console.log("userInformation", user);
+    // console.log("userInformation", user.fullname);
+
+
+
     const handleRotationToggle = () => {
         setIsRotated((prev) => !prev);
         setShowProfile(!isRotated);
@@ -50,15 +72,21 @@ const AfterNavBar = () => {
         }
     };
 
+    const logout = () => {
+        dispatch(setToken(null)); // Clear the token
+        dispatch(clearUser());    // Clear the user info
+    };
 
-    if (user === undefined) {
-        return (
-            <div className="loading-container" style={{ backgroundColor, color: textColor }}>
-                <div className="loader"></div>
-                <p>Loading...</p>
-            </div>
-        );
-    }
+
+
+    // if (user === undefined) {
+    //     return (
+    //         <div className="loading-container" style={{ backgroundColor, color: textColor }}>
+    //             <div className="loader"></div>
+    //             <p>Loading...</p>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div>
@@ -103,7 +131,7 @@ const AfterNavBar = () => {
                         <div>
                             <a href='#' onClick={handleRotationToggle}>
                                 <img
-                                    src={user?.[0]?.pic}
+                                    src={user?.pic}
                                     alt='insta'
                                     width={40}
                                     className='rounded-circle'
@@ -160,15 +188,15 @@ const AfterNavBar = () => {
                     <div className='row'>
                         <div className='col-lg-4 col-md-4 col-sm-4 col-4'>
                             <img
-                                src={user?.[0]?.pic}
-                                alt='insta'
+                                src={user?.pic}
+                                alt='pic'
                                 width={80}
                                 className='rounded-circle'
                             />
                         </div>
                         <div className='col-lg-6 col-md-6 col-sm-6 col-6 mt-3'>
-                            <span><h5>{user?.[0]?.name}</h5></span>
-                            <a href='/editprofile'>Edit Profile</a>
+                            <span><h5>{user?.fullname}</h5></span>
+                            <a href=''>Edit Profile</a>
                         </div>
                     </div>
                     <hr />
@@ -178,10 +206,11 @@ const AfterNavBar = () => {
                         </a>
                     </div>
                     <div>
-                        <a href='/myadd'>
+                        <a href={`/myadd/${user?._id}`}>
                             <button className='customize-drop-btn'>My Add</button>
                         </a>
                     </div>
+
                     <hr />
                     <button className='nav-custom-btn' variant="primary"
                         onClick={() => logout()}>Logout</button>

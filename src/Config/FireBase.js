@@ -22,10 +22,9 @@ const storage = getStorage(app);
 // ================ Register User =============================
 
 const SignWithEmailPass = async (userInfo) => {
-  const { name, phone, email, pic, password } = userInfo;
+  const { pic } = userInfo;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
 
     if (!pic || !pic.name) {
       console.error('Invalid itemPic object:', pic);
@@ -36,14 +35,14 @@ const SignWithEmailPass = async (userInfo) => {
     await uploadBytes(storageRef, pic);
     const url = await getDownloadURL(storageRef);
 
-    await addDoc(collection(db, "users"), {
-      name,
-      phone,
-      pic: url,
-      uid
-    });
+    // await addDoc(collection(db, "users"), {
+    //   name,
+    //   phone,
+    //   pic: url,
+    //   uid
+    // });
 
-    alert('Your Account is Registered Now');
+    // alert('Your Account is Registered Now');
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -125,13 +124,14 @@ const PostAdd = async (Adds) => {
 
 // ================ logout User =============================
 
-const logout = () => {
+const loout = () => {
 
-  signOut(auth).then(() => {
-    // Sign-out successful.
-  }).catch((error) => {
-    // An error happened.
-  });
+   localStorage.removeItem('token');
+  // signOut(auth).then(() => {
+  //   // Sign-out successful.
+  // }).catch((error) => {
+  //   // An error happened.
+  // });
 }
 
 // ================ Show Add =============================
@@ -319,10 +319,10 @@ const PurchaseData = async (info) => {
 // ================ Export =============================
 
 export {
-  SignWithEmailPass,
+  // SignWithEmailPass,
   loginWithEmailAndPass,
   auth,
-  logout,
+  storage,
   PostAdd,
   getData,
   getDataid,

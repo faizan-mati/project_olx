@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <EditProfile />
     },
     {
-        path: "/myadd",
+        path: "/myadd/:id",
         element: <MyAdds />
     },
     {

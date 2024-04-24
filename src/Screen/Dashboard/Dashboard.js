@@ -33,23 +33,25 @@ const Dashboard = () => {
 
 
   const productData = async () => {
-    // fetch('https://fakest  oreapi.com/products')
-    //   .then((res) => res.json())
-    //   .then((res) => setApiData(res))
-    const Adds = await getData()
+    fetch('http://localhost:3001/product/')
+      .then((res) => res.json())
+      .then((res) => setApiData(res.data))
+    // const Adds = await getData()
     // console.log("getData", Adds)
-    setApiData(Adds)
+    // setApiData(Adds)
   }
+
+  console.log("dashboard data ", apiData);
 
   // console.log('apiData', apiData[0].itemPic)
 
-  if (apiData.length <= 0) {
+  if (!Array.isArray(apiData) || apiData.length === 0) {
     return (
       <div className="loading-container" style={{ backgroundColor, color: textColor }}>
         <div className="loader"></div>
         <p>Loading...</p>
       </div>
-    )
+    );
   }
   return (
     <div style={{ backgroundColor, color: textColor }}>
@@ -60,15 +62,16 @@ const Dashboard = () => {
 
           {apiData.map((item, index) => (
             <div className='card col-lg-4 col-md-6 col-sm-12 col-12 my-3' style={{ backgroundColor, color: textColor }}>
-              <div onClick={() => navigate(`/detail/${apiData[index].id}`)} key={index}
+              <div onClick={() => navigate(`/detail/${apiData[index]._id}`)} key={index}
                 className=''>
+                  {/* <h1>{apiData[index]._id}</h1> */}
                 <Prodect name={apiData[index].itemName} price={apiData[index].itemPrice}
                   des={apiData[index].itemDes} image={item.itemPics && item.itemPics.length > 0 ? item.itemPics[0] : ''}
                    postDate={apiData[index].postDate} />
               </div>
-              <button className='nav-custom-btn mx-3 my-2' style={{ backgroundColor: theme }} onClick={() => {
+              {/* <button className='nav-custom-btn mx-3 my-2' style={{ backgroundColor: theme }} onClick={() => {
                 navigate("/purchase")
-              }} >Purchase</button>
+              }} >Purchase</button> */}
               <button
                 className="nav-custom-btn mx-3 my-2"
                 style={{ backgroundColor: theme }}

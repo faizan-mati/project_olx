@@ -17,12 +17,13 @@ const ProductDetail = () => {
     const { addId } = useParams();
     const theme = useSelector((state) => state.theme);
 
+    // console.log("paramid", addId);
+
     // Provide default values if theme is undefined
     const backgroundColor = theme?.backgroundColor || 'white';
     const textColor = theme?.textColor || 'black';
-    // console.log("useparam", addId);
     useEffect(() => {
-        productData()
+        productData(addId)
     }, []);
 
     const handlePreviousImage = () => {
@@ -34,25 +35,32 @@ const ProductDetail = () => {
     };
 
 
-    const productData = async () => {
-        try {
-            const product = await getDataid(addId);
-            setApiData(product);
-        } catch (error) {
-            console.error("Error fetching product data:", error);
-            // Handle the error (e.g., show an error message to the user)
-        }
+    const productData = async (addId) => {
+        // try {
+        //     const product = await getDataid(addId);
+        //     setApiData(product);
+        // } catch (error) {
+        //     console.error("Error fetching product data:", error);
+        //     // Handle the error (e.g., show an error message to the user)
+        // }
+        console.log("useparam", addId);
+
+        fetch(`http://localhost:3001/product/${addId}`)
+            .then(res => res.json())
+            .then(res => setApiData(res.data))
+            .catch(error => console.error('Error fetching product details:', error))
     };
     console.log('apidata in detail', apiData);
-
-    if (apiData.length <= 0) {
+  
+    if (!apiData || Object.keys(apiData).length === 0) {
         return (
             <div className="loading-container" style={{ backgroundColor, color: textColor }}>
                 <div className="loader"></div>
                 <p>Loading...</p>
             </div>
-        )
+        );
     }
+    
 
 
     return (
@@ -136,7 +144,6 @@ const ProductDetail = () => {
                                 </div>
                                 <div className='col-lg-4 col-md-6 col-sm-6 mt-4'>
                                     <p>Name : {apiData.itemName}</p>
-                                    {/* <p>Type : {apiData.category}</p> */}
                                     <p>Brand : {apiData.brandName}</p>
                                     <p>Condition : {apiData.itemCondition}</p>
                                     <p>Payment Method : {apiData.paymentMethod}</p>

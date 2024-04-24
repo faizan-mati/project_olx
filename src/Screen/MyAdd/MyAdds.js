@@ -3,7 +3,7 @@ import Prodect from '../../Component/ProductCard/Prodect';
 import { getCurrentUserUID, getMyAdd, deleteAdvertisement } from '../../Config/FireBase';
 import { useSelector } from 'react-redux';
 import noAdds from '../../Images/noAddAvaliable.png'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MyAdds = () => {
   const [user, setUser] = useState([]);
@@ -15,24 +15,36 @@ const MyAdds = () => {
   const backgroundColor = theme?.backgroundColor || 'white';
   const textColor = theme?.textColor || 'black';
 
-  useEffect(() => {
-    userInfo(uid);
-  }, [uid]);
+  const { id } = useParams();
 
-  const userInfo = async (uid) => {
-    const users = await getMyAdd(uid);
-    setUser(users.data);
+  useEffect(() => {
+    userInfo(id);
+  }, [id]); // Use 'id' instead of 'uid'
+
+  const userInfo = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/product/myadd/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch product details');
+      }
+      const data = await response.json();
+      setUser(data.data);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
   };
 
+  console.log('apidata in detail', user);
+
+
   const handleDelete = async (adId) => {
-    const result = await deleteAdvertisement(adId);
-    if (result.status === 200) {
-      // Refresh the user's advertisement list after deletion
-      userInfo(uid);
-    } else {
-      console.error("Failed to delete advertisement:", result.message);
-      // Handle the error as needed
-    }
+    console.log("adId", adId);
+    fetch(`http://localhost:3001/product/delete/${adId}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(error => console.error('Error:', error));
   };
 
   return (
@@ -57,7 +69,7 @@ const MyAdds = () => {
                   image={item.itemPics && item.itemPics.length > 0 ? item.itemPics[0] : ''} // Check if item.itemPic is defined before accessing its length
                   postDate={item.postDate}
                 />
-                <button className='nav-custom-btn mx-3 mt-4' onClick={() => handleDelete(item.docid)}>Delete</button>
+                <button className='nav-custom-btn mx-3 mt-4' onClick={() => handleDelete(item._id)}>Delete</button>
               </div>
             ))
           )}
